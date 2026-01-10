@@ -1,281 +1,205 @@
-# 🔁 Polymarket Copy Trading Bot
+# Polymarket Copy Trading Bot
 
-Polymarket copy trading bot is an automated trading system designed to replicate the trading strategies of successful Polymarket traders in real-time. A straightforward, high-speed copy trading bot for **Polymarket**, built with **TypeScript** for type safety and modern JavaScript features.
+A high-performance Rust-based automated trading bot that copies trades from successful Polymarket traders (whales) in real-time.
 
-<div align="center">
-  <a href="../../releases/latest">
-    <img width="1200" alt="Polymarket copy trading bot is an automated trading system designed to replicate the trading strategies of successful Polymarket traders in real-time." src="assets/polymarket.png" />
-  </a>
-</div>
+## Table of Contents
 
----
+1. [Quick Start Guide](#1-quick-start-guide-for-beginners)
+2. [Documentation](#2-documentation)
+3. [Requirements](#3-requirements)
+4. [Security Notes](#4-security-notes)
+5. [How It Works](#5-how-it-works)
+6. [Features](#6-features)
+7. [Advanced Usage](#7-advanced-usage)
+8. [Output Files](#8-output-files)
+9. [Getting Help](#9-getting-help)
+10. [Disclaimer](#10-disclaimer)
 
-## Overview
+## 1. Quick Start (For Beginners)
 
-This bot monitors selected Polymarket wallets in real time and **automatically mirrors their trades**.  
+### 1.1 Step 1: Install Rust
 
-Perfect for users who want a **simple, fast, and reliable** copy-trading setup with the benefits of TypeScript's type safety and modern tooling.
+**Windows:**
+1. Download and run the installer from https://rustup.rs/
+2. Follow the installation wizard
+3. Restart your terminal/PowerShell
 
----
-```
-polymarket-copy-bot/
-│
-├── src/
-│   ├── main.ts
-│   ├── config.ts
-│   ├── api.ts
-│   ├── polymarket_api.ts
-│   ├── watcher.ts
-│   ├── interpreter.ts
-│   ├── sizing.ts
-│   ├── executor.ts
-│   ├── risk.ts
-│   ├── strategy.ts
-│   └── agent.ts
-│
-├── package.json
-├── tsconfig.json
-└── .env
-```
----
-## Core Features
-
-- **Auto Copy Trading** — automatically replicates trades from a target Polymarket trader.  
-- **Risk Controls** — adjustable fetch intervals, retry limits, and timestamp filtering.  
-- **Type Safety** — full TypeScript support with compile-time type checking.  
-- **Simple Configuration** — all settings managed through a `.env` file and `config.ts`.
-
-### Real-Time Wallet Mirroring
-
-> The bot continuously monitors target wallets: detects trades instantly, identifies the event, direction, and stake, executes mirrored trades within <150ms, and uses asynchronous processing for maximum speed.
-
-
----
-
-### 2. Position Scaling
-
-Choose how the bot sizes your trades:
-
-**Proportional Mode:**
+**macOS:**
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-YourStake = (YourBank / TraderBank) × TraderStake
-
+**Linux:**
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-**Fixed Allocation Mode:**
+### 1.2 Step 2: Clone This Repository
+
+```bash
+git clone <your-repo-url>
+cd Polymarket-Copy-Trading-Bot
 ```
 
-Always bet $X per trade
+### 1.3 Step 3: Configure Your Settings
 
-```
-
-Includes:
-- Min/max trade size  
-- Liquidity checks  
-- Event-level exposure limits  
-
----
-
-### 3. Multi-Wallet Copying
-
-Copy multiple wallets at once.  
-You can set:
-
-- Equal weights  
-- Custom weights  
-- Per-wallet limits  
-
-The bot will open/close positions in sync with each tracked wallet.
-
----
-
-### 4. Fail-Safe Execution Layer
-
-Built for reliability:
-
-- No duplicate trades  
-- Automatic retries  
-- Handles Polymarket API interruptions  
-- Auto-exit when the original wallet exits the position  
-
----
-
-## ⚙️ Architecture (Simplified)
-
-```
-
-+------------------------------+
-|      Wallet Watcher          |
-|  Real-time wallet tracking   |
-+--------------+---------------+
-|
-v
-+------------------------------+
-|     Trade Interpreter        |
-| Detect event, direction, $   |
-+--------------+---------------+
-|
-v
-+------------------------------+
-|     Position Sizing Engine   |
-| Scale or fixed allocation    |
-+--------------+---------------+
-|
-v
-+------------------------------+
-|       Trade Executor         |
-| Market/limit execution       |
-+--------------+---------------+
-|
-v
-Polymarket API
-
-```
-
----
-## Example Copy Script
-
-1. A tracked wallet buys **"Biden wins MI"** at 48%.
-2. Bot detects the trade instantly.
-3. Your sizing rule is applied (e.g., $25 fixed).
-4. The bot mirrors the trade within ~150 ms.
-5. When the wallet exits, your position closes automatically.
-6. Optional rule: the bot can automatically close your trade once it reaches **X% profit**, regardless of what the tracked wallet does.
-
----
-
-## Risk Controls
-
-- Max stake per event  
-- Daily/weekly exposure limits  
-- Liquidity filters  
-- Per-wallet exposure caps  
-- Automatic recovery  
-- Full trade log  
-
----
-## 🖥️ Installation and Launch
-
-### Prerequisites
-
-- **Node.js 18+** - Download from [nodejs.org](https://nodejs.org/)
-- **npm** (comes with Node.js)
-
-### Installation Steps
-
-1. **Clone the repository**
+1. Copy the example environment file:
    ```bash
-   git clone <repository-url>
-   cd polymarket-copy-trading-bot
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   - Create a `.env` file in the root directory
-   - Add your configuration:
-     ```env
-     POLYMARKET_API=https://api.polymarket.com
-     OPENAI_API_KEY=your_openai_api_key_here
-     ```
-
-4. **Configure wallets**
-   - Edit `src/config.ts` and update the `wallets_to_track` array with actual wallet addresses
-
-5. **Run the bot**
-   ```bash
-   # Development mode
-   npm run dev
+   # Windows (PowerShell)
+   Copy-Item .env.example .env
    
-   # Production mode
-   npm run build
-   npm start
+   # macOS/Linux
+   cp .env.example .env
    ```
 
-### Available Scripts
+2. Open `.env` in any text editor (Notepad, VS Code, etc.)
 
-- `npm run dev` - Run in development mode with tsx
-- `npm run build` - Compile TypeScript to JavaScript
-- `npm start` - Run the compiled JavaScript
-- `npm run watch` - Watch mode (auto-rebuild on changes)
-- `npm run cli` - Run CLI commands (see CLI_USAGE.md)
+3. Fill in the required values (see [Configuration Guide](docs/CONFIGURATION.md) for details):
+   - `PRIVATE_KEY` - Your wallet's private key (keep this SECRET!)
+   - `FUNDER_ADDRESS` - Your wallet address (same wallet as private key)
+   - `TARGET_WHALE_ADDRESS` - The whale address you want to copy (40-char hex, no 0x)
+   - `ALCHEMY_API_KEY` - Get from https://www.alchemy.com/ (or use CHAINSTACK_API_KEY)
 
-### CLI Commands
+4. Optional: Adjust trading settings (see [Configuration Guide](docs/CONFIGURATION.md))
 
-The bot includes a user-friendly CLI. Quick start:
+### 1.4 Step 4: Validate Your Configuration
 
-```bash
-# Initialize
-npm run cli init
-
-# Add wallets
-npm run cli wallets add <address>
-
-# Configure
-npm run cli config --mode fixed --stake 25
-
-# Start bot
-npm run cli start
-```
-
-See [CLI_USAGE.md](CLI_USAGE.md) for complete CLI documentation.
-
----
-## Tech Stack
-
-| Layer     | Technology          |
-|-----------|----------------------|
-| Language  | TypeScript 5.3+      |
-| Runtime   | Node.js 18+          |
-| HTTP      | axios                |
-| Data      | Polymarket API       |
-| AI        | OpenAI API           |
-| Interface | CLI                  |
-
----
-
-## Development
-
-### Project Structure
-
-- `src/main.ts` - Main entry point
-- `src/config.ts` - Configuration management
-- `src/api.ts` - Polymarket API client
-- `src/watcher.ts` - Wallet monitoring with async generators
-- `src/interpreter.ts` - Trade normalization
-- `src/sizing.ts` - Position sizing logic
-- `src/executor.ts` - Trade execution
-- `src/risk.ts` - Risk management
-- `src/strategy.ts` - Trading strategies (Kelly criterion, expected value)
-- `src/agent.ts` - AI event analysis with OpenAI
-
-### Type Checking
+Before running the bot, verify your setup is correct:
 
 ```bash
-npx tsc --noEmit
+cargo run --release --bin validate_setup
 ```
 
-### Additional Documentation
+This will check if all required settings are correct and provide helpful error messages if something is wrong.
 
-- [QUICKSTART.md](QUICKSTART.md) - Quick start guide
-- [README_TYPESCRIPT.md](README_TYPESCRIPT.md) - Detailed TypeScript documentation
-- [MIGRATION_SUMMARY.md](MIGRATION_SUMMARY.md) - Python to TypeScript migration details
+### 1.5 Step 5: Test Mode (Recommended First)
 
----
+Run in test mode to see what the bot would do without actually trading:
 
-## Contact
+```bash
+# Set MOCK_TRADING=true in your .env file, then:
+cargo run --release
+```
 
-For questions, support, or collaboration, reach out on Telegram: [@terauss](https://t.me/terauss)
+### 1.6 Step 6: Run the Bot
 
----
+Once you're confident everything works:
 
-## License
+```bash
+# Enable trading in .env (ENABLE_TRADING=true, MOCK_TRADING=false)
+cargo run --release
+```
 
-MIT License.
+**Windows users:** You can also double-click `run.bat` after setting up your `.env` file.
 
----
-`Copy trades fast. Copy trades directly. No extra logic — just pure mirroring`
+## 2. Documentation
+
+- **[Quick Start Guide](docs/QUICK_START.md)** - 5-minute setup guide
+- **[Complete Setup Guide](docs/SETUP_GUIDE.md)** - Detailed step-by-step instructions
+- **[Configuration Guide](docs/CONFIGURATION.md)** - All settings explained
+- **[Features Overview](docs/FEATURES.md)** - What the bot does and how it works
+- **[Trading Strategy](docs/STRATEGY.md)** - Complete strategy logic and decision-making
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+
+## 3. Requirements
+
+### 3.1 Required
+
+1. **A Polymarket Account** - Sign up at https://polymarket.com
+2. **A Web3 Wallet** - MetaMask recommended (with some USDC/USDC.e on Polygon)
+3. **RPC Provider API Key** - Free tier from [Alchemy](https://www.alchemy.com/) or [Chainstack](https://chainstack.com/)
+4. **The Whale Address** - The trader you want to copy (40-character hex address)
+
+### 3.2 Recommended
+
+- **Some Coding Knowledge** - Not required, but helpful for troubleshooting
+- **Sufficient Funds** - The bot uses 2% of whale trade size by default (configurable)
+
+## 4. Security Notes
+
+⚠️ **IMPORTANT:**
+- Never share your `PRIVATE_KEY` with anyone
+- Never commit your `.env` file to git (it's already in `.gitignore`)
+- Start with small amounts to test
+- Use `MOCK_TRADING=true` first to verify everything works
+
+## 5. How It Works
+
+1. **Monitors** blockchain events for trades from your target whale (real-time via WebSocket)
+2. **Analyzes** each trade (size, price, market conditions) using multi-layer risk checks
+3. **Calculates** position size (2% default, with tier-based multipliers) and price (whale price + buffer)
+4. **Executes** a scaled copy of the trade with optimized order types (FAK/GTD)
+5. **Retries** failed orders with intelligent resubmission logic (up to 4-5 attempts)
+6. **Protects** you with risk guards (circuit breakers) and safety features
+7. **Logs** everything to CSV files for analysis
+
+**Strategy Highlights:**
+- **2% Position Scaling:** Reduces risk while maintaining meaningful positions
+- **Tiered Execution:** Different strategies for large (4000+), medium (2000-3999), and small (<2000) trades
+- **Multi-Layer Risk Management:** 4 layers of safety checks prevent dangerous trades
+- **Intelligent Pricing:** Price buffers optimize fill rates (higher for large trades, none for small)
+- **Sport-Specific Adjustments:** Additional buffers for tennis and soccer markets
+
+See [Features Overview](docs/FEATURES.md) for feature details and [Strategy Guide](docs/STRATEGY.md) for complete trading logic.
+
+## 6. Features
+
+- ✅ Real-time trade copying
+- ✅ Intelligent position sizing (2% default, configurable)
+- ✅ Circuit breakers for risk management
+- ✅ Automatic order resubmission on failures
+- ✅ Market cache system for fast lookups
+- ✅ CSV logging for all trades
+- ✅ Live market detection
+- ✅ Tiered execution based on trade size
+
+## 7. Advanced Usage
+
+### 7.1 Running Different Modes
+
+```bash
+# Standard mode (monitors confirmed blocks)
+cargo run --release
+
+# Mempool mode (faster, but less reliable)
+cargo run --release --bin mempool_monitor
+
+# Monitor your own fills only (no trading)
+cargo run --release --bin trade_monitor
+
+# Validate configuration
+cargo run --release --bin validate_setup
+```
+
+### 7.2 Building for Production
+
+```bash
+# Optimized release build
+cargo build --release
+
+# The binary will be at: target/release/pm_bot.exe (Windows)
+#                        target/release/pm_bot (macOS/Linux)
+```
+
+## 8. Output Files
+
+- `matches_optimized.csv` - All detected and executed trades
+- `.clob_creds.json` - Auto-generated API credentials (don't modify)
+- `.clob_market_cache.json` - Market data cache (auto-updated)
+
+## 9. Getting Help
+
+1. Check [Troubleshooting Guide](docs/TROUBLESHOOTING.md)
+2. Run the config validator: `cargo run --release --bin validate_setup`
+3. Review your `.env` file against `.env.example`
+4. Check console output for error messages
+5. Review [Strategy Guide](docs/STRATEGY.md) to understand bot logic
+
+## 10. Disclaimer
+
+This bot is provided as-is. Trading involves financial risk. Use at your own discretion. Test thoroughly before using real funds. The authors are not responsible for any losses.
+
+## 📄 License
+
+[Your License Here]
+
