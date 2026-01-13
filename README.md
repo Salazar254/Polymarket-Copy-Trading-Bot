@@ -1,207 +1,246 @@
 # Polymarket Copy Trading Bot
 
-A high-performance Rust-based automated trading bot that copies trades from successful Polymarket traders (whales) in real-time.
+> Automated copy trading bots for Polymarket that mirror trades from successful traders (whales) in real-time.
 
-## Table of Contents
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/terauss/Polymarket-Copy-Trading-Bot)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
-1. [Quick Start Guide](#1-quick-start-guide-for-beginners)
-2. [Documentation](#2-documentation)
-3. [Requirements](#3-requirements)
-4. [Security Notes](#4-security-notes)
-5. [How It Works](#5-how-it-works)
-6. [Features](#6-features)
-7. [Advanced Usage](#7-advanced-usage)
-8. [Output Files](#8-output-files)
-9. [Getting Help](#9-getting-help)
-10. [Disclaimer](#10-disclaimer)
+## 📋 Overview
 
-## 1. Quick Start (For Beginners)
+This repository contains **two implementations** of a Polymarket copy trading bot:
 
-### 1.1 Step 1: Install Rust
+1. **Rust Bot** (`rust/`) - High-performance, production-ready implementation
+2. **Python Bot** (`python/`) - Feature-rich implementation with extensive tooling
 
-**Windows:**
-1. Download and run the installer from https://rustup.rs/
-2. Follow the installation wizard
-3. Restart your terminal/PowerShell
+Both bots automatically monitor and copy trades from successful Polymarket traders, executing scaled positions based on your capital and risk preferences.
 
-**macOS:**
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
+## 🚀 Quick Start
 
-**Linux:**
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
+### Choose Your Bot
 
-### 1.2 Step 2: Clone This Repository
+**Use the Rust Bot if you want:**
+- ⚡ Maximum performance and speed
+- 🎯 Focused, streamlined trading functionality
+- 🔒 Production-grade reliability
+- 📦 Single binary deployment
+
+**Use the Python Bot if you want:**
+- 🛠️ Extensive tooling and research scripts
+- 📊 Advanced simulation and backtesting
+- 🔍 Trader research and analysis tools
+- 💼 Position management utilities
+- 📈 Comprehensive logging and monitoring
+
+### Rust Bot Quick Start
 
 ```bash
-git clone https://github.com/terauss/Polymarket-Copy-Trading-Bot.git
-git clone 
-cd Polymarket-Copy-Trading-Bot
-```
-
-### 1.3 Step 3: Configure Your Settings
-
-1. Copy the example environment file:
-   ```bash
-   # Windows (PowerShell)
-   Copy-Item .env.example .env
-   
-   # macOS/Linux
-   cp .env.example .env
-   ```
-
-2. Open `.env` in any text editor (Notepad, VS Code, etc.)
-
-3. Fill in the required values (see [Configuration Guide](docs/03_CONFIGURATION.md) for details):
-   - `PRIVATE_KEY` - Your wallet's private key (keep this SECRET!)
-   - `FUNDER_ADDRESS` - Your wallet address (same wallet as private key)
-   - `TARGET_WHALE_ADDRESS` - The whale address you want to copy (40-char hex, no 0x)
-   - `ALCHEMY_API_KEY` - Get from https://www.alchemy.com/ (or use CHAINSTACK_API_KEY)
-
-4. Optional: Adjust trading settings (see [Configuration Guide](docs/03_CONFIGURATION.md))
-
-### 1.4 Step 4: Validate Your Configuration
-
-Before running the bot, verify your setup is correct:
-
-```bash
+cd rust
+# Follow the setup guide in rust/README.md
 cargo run --release --bin validate_setup
-```
-
-This will check if all required settings are correct and provide helpful error messages if something is wrong.
-
-### 1.5 Step 5: Test Mode (Recommended First)
-
-Run in test mode to see what the bot would do without actually trading:
-
-```bash
-# Set MOCK_TRADING=true in your .env file, then:
 cargo run --release
 ```
 
-### 1.6 Step 6: Run the Bot
+📖 **Full Documentation:** [rust/README.md](rust/README.md)
 
-Once you're confident everything works:
+### Python Bot Quick Start
 
 ```bash
-# Enable trading in .env (ENABLE_TRADING=true, MOCK_TRADING=false)
-cargo run --release
+cd python
+pip install -r requirements.txt
+python -m src.scripts.setup.setup
+python -m src.main
 ```
 
-**Windows users:** You can also double-click `run.bat` after setting up your `.env` file.
+📖 **Full Documentation:** [python/README.md](python/README.md)
 
-## 2. Documentation
+## 📁 Repository Structure
 
-- **[01. Quick Start Guide](docs/01_QUICK_START.md)** - 5-minute setup guide
-- **[02. Complete Setup Guide](docs/02_SETUP_GUIDE.md)** - Detailed step-by-step instructions
-- **[03. Configuration Guide](docs/03_CONFIGURATION.md)** - All settings explained
-- **[04. Features Overview](docs/04_FEATURES.md)** - What the bot does and how it works
-- **[05. Trading Strategy](docs/05_STRATEGY.md)** - Complete strategy logic and decision-making
-- **[06. Troubleshooting](docs/06_TROUBLESHOOTING.md)** - Common issues and solutions
+```
+Polymarket-Copy-Trading-Bot/
+│
+├── rust/                    # Rust implementation
+│   ├── src/                # Source code
+│   ├── docs/               # Documentation
+│   ├── README.md           # Rust bot documentation
+│   └── Cargo.toml          # Rust dependencies
+│
+├── python/                  # Python implementation
+│   ├── src/                # Source code
+│   ├── docs/               # Documentation
+│   ├── scripts/            # Utility scripts
+│   ├── README.md           # Python bot documentation
+│   └── requirements.txt    # Python dependencies
+│
+└── README.md               # This file
+```
 
-## 3. Requirements
+## 🔄 Key Differences
 
-### 3.1 Required
+| Feature | Rust Bot | Python Bot |
+|---------|----------|------------|
+| **Performance** | ⚡ Extremely fast | 🐍 Moderate |
+| **Setup Complexity** | 🟢 Simple | 🟡 Moderate |
+| **Trading Features** | ✅ Core trading | ✅ Core + Advanced |
+| **Research Tools** | ❌ No | ✅ Extensive |
+| **Simulation** | ❌ No | ✅ Full backtesting |
+| **Position Management** | ❌ Basic | ✅ Advanced |
+| **MongoDB Integration** | ❌ No | ✅ Yes |
+| **Multi-Trader Support** | ✅ Single trader | ✅ Multiple traders |
+| **Documentation** | 📚 Comprehensive | 📚 Extensive |
 
-1. **A Polymarket Account** - Sign up at https://polymarket.com
-2. **A Web3 Wallet** - MetaMask recommended (with some USDC/USDC.e on Polygon)
-3. **RPC Provider API Key** - Free tier from [Alchemy](https://www.alchemy.com/) or [Chainstack](https://chainstack.com/)
-4. **The Whale Address** - The trader you want to copy (40-character hex address)
+## 🎯 How It Works
 
-### 3.2 Recommended
+Both bots follow a similar core workflow:
 
-- **Some Coding Knowledge** - Not required, but helpful for troubleshooting
-- **Sufficient Funds** - The bot uses 2% of whale trade size by default (configurable)
+1. **Monitor** - Watch for trades from target traders (whales)
+2. **Analyze** - Evaluate trade size, price, and market conditions
+3. **Calculate** - Determine scaled position size based on your capital
+4. **Execute** - Place matching orders on Polymarket
+5. **Track** - Log all trades for analysis
 
-## 4. Security Notes
+### Rust Bot Strategy
+
+- Real-time blockchain monitoring via WebSocket
+- 2% default position scaling (configurable)
+- Tiered execution based on trade size
+- Multi-layer risk management
+- Sport-specific market adjustments
+
+### Python Bot Strategy
+
+- API polling or WebSocket monitoring
+- Proportional position sizing based on capital ratios
+- Trade aggregation for efficiency
+- MongoDB persistence for trade history
+- Advanced risk management and circuit breakers
+
+## 📚 Documentation
+
+### Rust Bot Documentation
+
+- **[Quick Start Guide](rust/docs/01_QUICK_START.md)** - 5-minute setup
+- **[Complete Setup Guide](rust/docs/02_SETUP_GUIDE.md)** - Detailed instructions
+- **[Configuration Guide](rust/docs/03_CONFIGURATION.md)** - All settings explained
+- **[Features Overview](rust/docs/04_FEATURES.md)** - Feature details
+- **[Trading Strategy](rust/docs/05_STRATEGY.md)** - Strategy logic
+- **[Troubleshooting](rust/docs/06_TROUBLESHOOTING.md)** - Common issues
+
+### Python Bot Documentation
+
+- **[Getting Started Guide](python/docs/GETTING_STARTED.md)** - Complete setup
+- **[Strategy Guide](python/docs/STRATEGY.md)** - Copy trading strategy
+- **[Command Reference](python/docs/COMMAND_REFERENCE.md)** - All commands
+- **[Usage Examples](python/docs/EXAMPLES.md)** - Practical examples
+
+## ⚙️ Requirements
+
+### Common Requirements
+
+- **Polymarket Account** - Sign up at [polymarket.com](https://polymarket.com)
+- **Web3 Wallet** - MetaMask recommended
+- **USDC/USDC.e** - On Polygon network for trading
+- **RPC Provider** - Alchemy, Chainstack, or Infura API key
+- **Whale Address** - The trader address you want to copy
+
+### Rust Bot Specific
+
+- Rust 1.70+ ([Install Rust](https://rustup.rs/))
+
+### Python Bot Specific
+
+- Python 3.10+
+- MongoDB database ([MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) free tier works)
+
+## 🔒 Security Notes
 
 ⚠️ **IMPORTANT:**
+
 - Never share your `PRIVATE_KEY` with anyone
-- Never commit your `.env` file to git (it's already in `.gitignore`)
+- Never commit your `.env` file to git
 - Start with small amounts to test
-- Use `MOCK_TRADING=true` first to verify everything works
+- Use test/mock mode first to verify everything works
+- Use a dedicated wallet separate from your main funds
 
-## 5. How It Works
+## 🛠️ Features
 
-1. **Monitors** blockchain events for trades from your target whale (real-time via WebSocket)
-2. **Analyzes** each trade (size, price, market conditions) using multi-layer risk checks
-3. **Calculates** position size (2% default, with tier-based multipliers) and price (whale price + buffer)
-4. **Executes** a scaled copy of the trade with optimized order types (FAK/GTD)
-5. **Retries** failed orders with intelligent resubmission logic (up to 4-5 attempts)
-6. **Protects** you with risk guards (circuit breakers) and safety features
-7. **Logs** everything to CSV files for analysis
+### Rust Bot Features
 
-**Strategy Highlights:**
-- **2% Position Scaling:** Reduces risk while maintaining meaningful positions
-- **Tiered Execution:** Different strategies for large (4000+), medium (2000-3999), and small (<2000) trades
-- **Multi-Layer Risk Management:** 4 layers of safety checks prevent dangerous trades
-- **Intelligent Pricing:** Price buffers optimize fill rates (higher for large trades, none for small)
-- **Sport-Specific Adjustments:** Additional buffers for tennis and soccer markets
-
-See [Features Overview](docs/04_FEATURES.md) for feature details and [Strategy Guide](docs/05_STRATEGY.md) for complete trading logic.
-
-## 6. Features
-
-- ✅ Real-time trade copying
-- ✅ Intelligent position sizing (2% default, configurable)
+- ✅ Real-time trade copying via WebSocket
+- ✅ Intelligent position sizing (2% default)
 - ✅ Circuit breakers for risk management
-- ✅ Automatic order resubmission on failures
-- ✅ Market cache system for fast lookups
-- ✅ CSV logging for all trades
+- ✅ Automatic order resubmission
+- ✅ Market cache system
+- ✅ CSV logging
 - ✅ Live market detection
-- ✅ Tiered execution based on trade size
+- ✅ Tiered execution
 
-## 7. Advanced Usage
+### Python Bot Features
 
-### 7.1 Running Different Modes
+- ✅ Multi-trader support
+- ✅ Smart position sizing
+- ✅ Trade aggregation
+- ✅ Real-time execution
+- ✅ MongoDB integration
+- ✅ Price protection
+- ✅ Extensive research tools
+- ✅ Simulation & backtesting
+- ✅ Position management utilities
+- ✅ Wallet management scripts
 
-```bash
-# Standard mode (monitors confirmed blocks)
-cargo run --release
+## 📊 Output Files
 
-# Mempool mode (faster, but less reliable)
-cargo run --release --bin mempool_monitor
-
-# Monitor your own fills only (no trading)
-cargo run --release --bin trade_monitor
-
-# Validate configuration
-cargo run --release --bin validate_setup
-```
-
-### 7.2 Building for Production
-
-```bash
-# Optimized release build
-cargo build --release
-
-# The binary will be at: target/release/pm_bot.exe (Windows)
-#                        target/release/pm_bot (macOS/Linux)
-```
-
-## 8. Output Files
-
+### Rust Bot
 - `matches_optimized.csv` - All detected and executed trades
-- `.clob_creds.json` - Auto-generated API credentials (don't modify)
-- `.clob_market_cache.json` - Market data cache (auto-updated)
+- `.clob_creds.json` - Auto-generated API credentials
+- `.clob_market_cache.json` - Market data cache
 
-## 9. Getting Help
+### Python Bot
+- `logs/bot-YYYY-MM-DD.log` - Daily log files
+- `trader_data_cache/` - Cached trader data
+- `simulation_results/` - Simulation results
+- MongoDB collections - Trade history and positions
 
-1. Check [Troubleshooting Guide](docs/06_TROUBLESHOOTING.md)
-2. Run the config validator: `cargo run --release --bin validate_setup`
-3. Review your `.env` file against `.env.example`
+## 🆘 Getting Help
+
+1. Check the bot-specific troubleshooting guides:
+   - [Rust Bot Troubleshooting](rust/docs/06_TROUBLESHOOTING.md)
+   - Python Bot: Run `python -m src.scripts.setup.system_status`
+2. Validate your configuration:
+   - Rust: `cargo run --release --bin validate_setup`
+   - Python: `python -m src.scripts.setup.system_status`
+3. Review your `.env` file against the examples
 4. Check console output for error messages
-5. Review [Strategy Guide](docs/05_STRATEGY.md) to understand bot logic
-
-## 10. Disclaimer
-
-This bot is provided as-is. Trading involves financial risk. Use at your own discretion. Test thoroughly before using real funds. The authors are not responsible for any losses.
 
 ## 📄 Contact
+
 For questions or issues, contact via Telegram: [@terauss](https://t.me/terauss)
 
+## ⚖️ Disclaimer
 
+This software is provided as-is. Trading involves financial risk. Use at your own discretion. Test thoroughly before using real funds. The authors are not responsible for any losses.
+
+## 📝 License
+
+ISC License - See [LICENSE](LICENSE) file for details.
+
+## 🌟 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 🔗 Links
+
+- **GitHub Repository:** [https://github.com/terauss/Polymarket-Copy-Trading-Bot](https://github.com/terauss/Polymarket-Copy-Trading-Bot)
+- **Polymarket:** [https://polymarket.com](https://polymarket.com)
+- **Polymarket Leaderboard:** [https://polymarket.com/leaderboard](https://polymarket.com/leaderboard)
+- **Predictfolio:** [https://predictfolio.com](https://predictfolio.com)
+
+---
+
+**Made with ❤️ for the Polymarket community**
 
